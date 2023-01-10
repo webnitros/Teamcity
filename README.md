@@ -31,22 +31,33 @@ docker run -d -u 0 --name teamcity-server-instance  \
 http://ip:8111/
 ```
 
+# Docker 
+
+## Teamcity
+
+Установить плагины
+Administration->Plugins
+
+```yaml
+Docker
+Docker Compose
+```
+
+## Права пользователя Docker
+
+Пользователя агента нужно добавить в группу Docker, чтобы он могу запускать docker сборки
+```
+sudo usermod -aG docker $USER
+```
+*Агента нужно авторизовать заново, иначе настройки не вступят в силу*
+
 ## Настройка
 
 Для работы предварительно нужно создать базу данных mysql с удаленным подключением так как docker изолирован
 И во время установки указываем базу для подключения
 
 
-# Установка Agent 
-
-Для работы нам нужен рабочий агент(runners)
-** информация о проблемах https://habr.com/ru/company/visiology/blog/594515/ **
-
-```bash
-docker pull jetbrains/teamcity-agent:2021.2-linux-sudo
-```
-
-## права на директории
+## Права на директории
 
 без них не будет работать нормально
 
@@ -57,12 +68,26 @@ chmod 666 /var/run/docker.sock \
   sudo chown -R 1000:1000 /srv/teamcity/buildagent/system
 ```
 
+
+
+################ ПРОБЛЕМА С ЗАПУСКОМ DOCKER
+
+# Установка Agent 
+
+Для работы нам нужен рабочий агент(runners)
+** информация о проблемах https://habr.com/ru/company/visiology/blog/594515/ **
+
+```bash
+docker pull jetbrains/teamcity-agent:2021.2-linux-sudo
+```
+
+
 ## Запуск агента
 
 ```bash
 docker run -dt \
   -u 0 \
-  -e SERVER_URL="https://teamcity.buseo.ru" \
+  -e SERVER_URL="http://ip:8111/" \
   --name teamcity-agent-instance \
   -v /srv/teamcity/agent/conf:/data/teamcity_agent/conf \
   --privileged -e DOCKER_IN_DOCKER=start \
