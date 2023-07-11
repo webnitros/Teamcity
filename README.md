@@ -97,3 +97,10 @@ docker run -dt \
   custom-agent-image:2021.2-linux-sudo
 ```
 
+
+# Восстановления бэкапа
+
+Если с файла на серерве то файл нужно положить в 
+data/
+путь в контейнере получиться 
+/data/teamcity_server/datadir/dump.zip
